@@ -1,172 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Detroit City Council District Map</title>
+  <title>City of Detroit Council District!</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="" />
 
-  <!-- ArcGIS API CSS and JavaScript -->
+  <!-- calls for the arcgis api's CSS file and JS library. -->
   <link rel="stylesheet" href="https://js.arcgis.com/4.25/esri/themes/light/main.css">
   <script src="https://js.arcgis.com/4.25/"></script>
 
-  <!-- Custom styles for full-screen map and button -->
-  <style>
-    html, body, #viewDiv {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    .addRecordBtn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background-color: #0079c1;
-      color: white;
-      padding: 8px 16px;
-      border: none;
-      border-radius: 4px;
-      font-size: 14px;
-      cursor: pointer;
-      text-decoration: none;
-    }
-
-    .addRecordBtn:hover {
-      background-color: #005a87;
-    }
-  </style>
-  
-  <!-- ArcGIS map configuration and widgets with expandable containers and home button -->
+  <!-- Adding the modules, API key, and map constant needed for a full screen map app -->
   <script>
+  
     require([
-      "esri/config",
+     "esri/config",
       "esri/Map",
       "esri/views/MapView",
       "esri/widgets/BasemapGallery",
       "esri/widgets/Search",
-      "esri/widgets/Home",
-      "esri/layers/FeatureLayer",
+      //adding in the module for the feature layers
+      "esri/layers/FeatureLayer",   
+      //adding in the module for the legend
       "esri/widgets/Legend",
-      "esri/widgets/Expand",
-      "esri/tasks/QueryTask",
-      "esri/tasks/support/Query"
-    ], function (esriConfig, Map, MapView, BasemapGallery, Search, Home, FeatureLayer, Legend, Expand, QueryTask, Query) {
-      esriConfig.apiKey = "AAPKd744f2fda2e347d9a3cf7faf3473cfaczN_o6-pVEC0xDG9THThI-plcBTYdOZQwfAaWLFCk-7w8cNq-B8MvENgmb2NpNTXc";
 
+
+
+      ], function (esriConfig,Map, MapView, Search, BasemapGallery, FeatureLayer, Legend) {
+
+      esriConfig.apiKey = "AAPKd744f2fda2e347d9a3cf7faf3473cfaczN_o6-pVEC0xDG9THThI-plcBTYdOZQwfAaWLFCk-7w8cNq-B8MvENgmb2NpNTXc";
       const map = new Map({
-        basemap: "dark-gray"
+        basemap: "dark-gray" // Basemap layer
       });
 
       const view = new MapView({
-        container: "viewDiv",
-        map: map,
-        center: [-83.046, 42.34],
-        zoom: 11
-      });
+          map: map,
+          center: [-83.046, 42.34], // Longitude, latitude
+          zoom: 11, // Zoom level
+          container: "viewDiv" // Div element
+        });
+        
+        // Create a new Search widget
+        const search = new Search({
+          view: view
+        });
+        //add the search widget to the top right corner of the view
+        view.ui.add(search, "top-right");
 
-      const basemapGallery = new BasemapGallery({
-        view: view
-      });
-      const expandBasemap = new Expand({
-        view: view,
-        content: basemapGallery,
-        expandIconClass: "esri-icon-basemap",
-        expanded: false
-      });
-
-      view.ui.add(expandBasemap, "top-left");
-
-      const home = new Home({
-        view: view
-      });
-      view.ui.add(home, "top-left");
-
+  
+     // Create a BasemapGallery widget instance and set properties
+     const basemapGallery = new BasemapGallery({
+          view: view
+          
+        });
+         // Add the widget to the top-right corner of the view
+         view.ui.add(basemapGallery, {
+          position: "bottom-left"
+        }); 
+       
+// Create featurelayer from feature service 
+const layer = new FeatureLayer({ 
+  // URL to the service 
+   url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/survey123_fd556031aae0456ca38a1e575a84e00f_results/FeatureServer",
+});
+      // add city council district layer
       const cityCouncil = new FeatureLayer({
         url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/CityCouncilDistrict/FeatureServer/0",
-        outFields: ["*"],
+        outFields: ["District_N"],
         popupTemplate: {
           title: "City Council District {District_N}",
-          content: "This is City Council District {District_N}"
-        }
-      });
+          content: "This is City Council District {District_N}",
+          labelPlacement: "top-left"
 
-      map.add(cityCouncil);
-
-      const search = new Search({
-        view: view,
-        allPlaceholder: "Search for address",
-        includeDefaultSources: false,
-        sources: [{
-          locator: new esri.tasks.Locator({
-            url: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"
-          }),
-          singleLineFieldName: "SingleLine",
-          name: "Address Search",
-          localSearchOptions: {
-            minScale: 300000,
-            distance: 50000
-          },
-          placeholder: "Search for an address",
-          maxResults: 3,
-          maxSuggestions: 6,
-          suggestionsEnabled: true,
-          minSuggestCharacters: 0
-        }]
-      });
-
-      const expandSearch = new Expand({
-        view: view,
-        content: search,
-        expandIconClass: "esri-icon-search",
-        expanded: true
-      });
-
-      search.on("select-result", function(event) {
-        const query = new Query();
-        query.geometry = event.result.feature.geometry; // use the geometry of the searched location
-        query.returnGeometry = true;
-        query.outFields = ["*"];
-
-        cityCouncil.queryFeatures(query).then(function(response){
-          if (response.features.length > 0) {
-            const feature = response.features[0];
-            view.popup.open({
-              title: `City Council District ${feature.attributes.District_N}`,
-              content: `The searched address is in City Council District ${feature.attributes.District_N}.`,
-              location: event.result.feature.geometry
-            });
-          } else {
-            view.popup.open({
-              title: "No District Found",
-              content: "The searched address is not within any city council district.",
-              location: event.result.feature.geometry
-            });
-          }
+        } 
         });
-      });
+      map.add(cityCouncil);
+      
+      const colorVis= {
+        type: "simple",
+        symbol: {
+          type: "simple-fill",
+          color: "rgba(192, 192, 192, .10)",
+          outline: {
+            color: "white",
+            width: 1,
+          }
+        }
+      };
+      cityCouncil.renderer = colorVis;
 
-      view.ui.add(expandSearch, "top-right");
-
+      // Create a new legend widget
       const legend = new Legend({
         view: view,
-        layerInfos: [{
-          layer: cityCouncil,
-          title: "City Council Districts"
-        }]
+        layerInfos: [
+          {
+            layer: cityCouncil,
+            title: "City Council Districts"
+          },
+         
+        ]
       });
-      const expandLegend = new Expand({
-        view: view,
-        content: legend,
-        expandIconClass: "esri-icon-layer-list",
-        expanded: true
-      });
-
-      view.ui.add(expandLegend, "bottom-right");
+      // Add the widget to the view
+      view.ui.add(legend, "bottom-right");
+      
     });
   </script>
+
+  <!-- css to make a full screen map -->
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+    .addRecordBtn {
+  position: absolute;
+  z-index: 10;
+  top: 10px;
+  right: 10px;
+  background-color: #0079c1;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.addRecordBtn:hover {
+  background-color: #005a87;
+}
+  </style>
+
 </head>
 <body>
+  <!-- Div element to hold the map -->
   <div id="viewDiv"></div>
-</body>
+  
 </html>

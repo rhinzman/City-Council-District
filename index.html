@@ -33,6 +33,7 @@
       "esri/Map",
       "esri/views/MapView",
       "esri/widgets/BasemapGallery",
+      "esri/widgets/filter",
       "esri/widgets/Search",
       "esri/tasks/query",
       "esri colors",
@@ -40,7 +41,7 @@
       "esri/layers/FeatureLayer",
       "esri/widgets/Legend",
       "esri/widgets/Expand"
-    ], function (esriConfig, Map, MapView, BasemapGallery, Search, Home, FeatureLayer, Legend, Expand) {
+    ], function (esriConfig, Map, MapView, BasemapGallery, Search, filter, Home, FeatureLayer, Legend, Expand) {
       esriConfig.apiKey = "AAPK9010d0b61469421388268a0a3d6b9970behQAuDdJqQ1pqWiFduaupUbAQXKrMzBGDNlYvnzFhJVmo4o4_JV_Y0cDx9Umj8M";
 
       const map = new Map({

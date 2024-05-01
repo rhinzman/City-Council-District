@@ -83,7 +83,7 @@
 
     // Add FeatureLayer for the AGOL table
     const trackerTable = new FeatureLayer({
-      url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/tracker/FeatureServer/0"
+      url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/searchQueries/FeatureServer/0"
     });
 
 
@@ -108,6 +108,7 @@
       //new listener
 
       search.on("select-result", function(event) {
+        console.log(event.result);
       const result = event.result;
       const address = result.name; // assuming 'name' contains the address
       const longitude = result.feature.geometry.longitude;
@@ -115,9 +116,9 @@
 
       // Prepare the attributes for the new record
       const attributes = {
-        address: address,
-        longitu: longitude,
-        latitu: latitude
+        Address: address,
+        Lon: longitude,
+        Lat: latitude
       };
 
       // Create a new feature to add to the table

@@ -17,7 +17,12 @@
       height: 100%;
     }
 
-  
+  #council-filter {
+    background-color: white;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  }
     
   </style>
   
@@ -71,6 +76,11 @@
         expanded: true
       });
       view.ui.add(councilFilter, "top-right");
+
+      function filterDistrict(district) {
+        cityCouncil.definitionExpression = `District_N = ${district}`;
+      }
+
 
 
 

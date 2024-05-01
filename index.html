@@ -34,6 +34,8 @@
       "esri/views/MapView",
       "esri/widgets/BasemapGallery",
       "esri/widgets/Search",
+      "esri/tasks/query",
+      "esri colors",
       "esri/widgets/Home",
       "esri/layers/FeatureLayer",
       "esri/widgets/Legend",
@@ -71,7 +73,6 @@
 
       
 
-
     // Add FeatureLayer for the AGOL table
     const trackerTable = new FeatureLayer({
       url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/searchQueries/FeatureServer/0"
@@ -89,22 +90,6 @@
         expandIconClass: "esri-icon-search",
         expanded: true
       });
-      const councilFilter = new Expand({
-        view: view,
-        content: document.getElementById("council-filter"),
-        expandIconClass: "esri-icon-filter",
-        expanded: true
-      });
-      view.ui.add(councilFilter, "top-right");
-
-      function filterDistrict(district) {
-        cityCouncil.definitionExpression = `District_N = ${district}`;
-      }
-
-      document.getElementById("district1").addEventListener("click", function() {
-        filterDistrict(1);
-      });
-      
       
 
       //old listerner
@@ -147,6 +132,23 @@
  
 
       view.ui.add(expandSearch, "top-right");
+      const councilFilter = new Expand({
+        view: view,
+        content: document.getElementById("council-filter"),
+        expandIconClass: "esri-icon-filter",
+        expanded: true
+      });
+      view.ui.add(councilFilter, "top-right");
+
+      function filterDistrict(district) {
+        cityCouncil.definitionExpression = `District_N = ${district}`;
+      }
+
+
+      document.getElementById("district1").addEventListener("click", function() {
+        filterDistrict(1);
+      });
+
 
       const cityCouncil = new FeatureLayer({
         url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/CityCouncilDistrict/FeatureServer/0",

@@ -64,45 +64,11 @@
       });
       view.ui.add(home, "top-left");
 
-      const councilFilter = document.getElementById("council-filter");
-      councilFilter.addEventListener("click", function(event) {
-        const target = event.target;
-        if (target.id === "district1") {
-          view.goTo({
-            target: [-83.046, 42.34],
-            zoom: 12
-          });
-        } else if (target.id === "district2") {
-          view.goTo({
-            target: [-83.046, 42.34],
-            zoom: 12
-          });
-        } else if (target.id === "district3") {
-          view.goTo({
-            target: [-83.046, 42.34],
-            zoom: 12
-          });
-        } else if (target.id === "district4") {
-          view.goTo({
-            target: [-83.046, 42.34],
-            zoom: 12
-          });
-        } else if (target.id === "district5") {
-          view.goTo({
-            target: [-83.046, 42.34],
-            zoom: 12
-          });
-        } else if (target.id === "district6") {
-          view.goTo({
-            target: [-83.046, 42.34],
-            zoom: 12
-          });
-        } else if (target.id === "district7") {
-          view.goTo({
-            target: [-83.046, 42.34],
-            zoom: 12
-          });
-        }
+      const councilFilter = new Expand({
+        view: view,
+        content: document.getElementById("council-filter"),
+        expandIconClass: "esri-icon-filter",
+        expanded: true
       });
       view.ui.add(councilFilter, "top-right");
 

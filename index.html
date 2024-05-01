@@ -20,10 +20,15 @@
   #council-filter {
     background-color: white;
     padding: 10px;
+    text-align: center;
     border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 5px rgba(52, 52, 52, 0.1);
   }
-    
+  .council-filter-text {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
   </style>
   
   <!-- ArcGIS map configuration and widgets with expandable containers and home button -->
@@ -33,15 +38,13 @@
       "esri/Map",
       "esri/views/MapView",
       "esri/widgets/BasemapGallery",
-      "esri/widgets/filter",
       "esri/widgets/Search",
       "esri/tasks/query",
-      "esri colors",
       "esri/widgets/Home",
       "esri/layers/FeatureLayer",
       "esri/widgets/Legend",
       "esri/widgets/Expand"
-    ], function (esriConfig, Map, MapView, BasemapGallery, Search, filter, Home, FeatureLayer, Legend, Expand) {
+    ], function (esriConfig, Map, MapView, BasemapGallery, Search, Home, FeatureLayer, Legend, Expand) {
       esriConfig.apiKey = "AAPK9010d0b61469421388268a0a3d6b9970behQAuDdJqQ1pqWiFduaupUbAQXKrMzBGDNlYvnzFhJVmo4o4_JV_Y0cDx9Umj8M";
 
       const map = new Map({

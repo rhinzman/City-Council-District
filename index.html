@@ -17,23 +17,34 @@
       height: 100%;
     }
 
-    .addRecordBtn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background-color: #0079c1;
-      color: white;
-      padding: 8px 16px;
-      border: none;
-      border-radius: 4px;
-      font-size: 14px;
+    #council-filter {
+    height: 160px;
+    width: 100%;
+    background-color: #f8f9fa;
+    }
+    .council-filter-item {
+      width: 100%;
+      padding: 12px;
+      text-align: center;
+      vertical-align: baseline;
       cursor: pointer;
-      text-decoration: none;
+      height: 40px;
     }
-
-    .addRecordBtn:hover {
-      background-color: #005a87;
+    .council-filter-item focus{
+      background-color: #606163;
     }
+    .council-filter-item:hover {
+      background-color: #e9ecef;
+    }
+    #titleDiv{
+      background-color: #f8f9fa;
+    }
+    #titleText {
+        font-size: 20pt;
+        font-weight: 60;
+        padding-bottom: 10px;
+      }
+    
   </style>
   
   <!-- ArcGIS map configuration and widgets with expandable containers and home button -->
@@ -183,5 +194,17 @@
 </head>
 <body>
   <div id="viewDiv"></div>
+  <div class="'council-filter-item" id="council-filter">
+    <div id="titleDiv">
+      <h1 id="titleText">Detroit City Council Districts</h1>
+    </div>
+    <div class="council-filter-item" id="district1">District 1</div>
+    <div class="council-filter-item" id="district2">District 2</div>
+    <div class="council-filter-item" id="district3">District 3</div>
+    <div class="council-filter-item" id="district4">District 4</div>
+    <div class="council-filter-item" id="district5">District 5</div>
+    <div class="council-filter-item" id="district6">District 6</div>
+    <div class="council-filter-item" id="district7">District 7</div>
+  </div>
 </body>
 </html>

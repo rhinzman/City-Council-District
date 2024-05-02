@@ -132,6 +132,7 @@
  
 
       view.ui.add(expandSearch, "top-right");
+
       const councilFilter = new Expand({
         view: view,
         content: document.getElementById("council-filter"),
@@ -145,9 +146,6 @@
       }
 
 
-      document.getElementById("district1").addEventListener("click", function() {
-        filterDistrict(1);
-      });
 
 
       const cityCouncil = new FeatureLayer({
@@ -172,6 +170,25 @@
           }
         }
       };
+      // Define the Query
+const query = new Query();
+query.returnGeometry = true;
+query.outFields = ["*"];
+// Set the where clause to the filter you want to apply
+query.where = "District_N = '1'"; // Change this to your actual filter
+
+// Execute the query
+featureLayer.queryFeatures(query).then(function(results){
+  // Highlight the selected features
+  view.whenLayerView(featureLayer).then(function(layerView){
+    const highlight = layerView.highlight(results.features);
+
+    // Zoom to the selected features
+    view.goTo(results.features).then(function(){
+      view.zoom = 15; // Change this to your desired zoom level
+    });
+  });
+});
 
       const legend = new Legend({
         view: view,

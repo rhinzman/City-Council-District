@@ -133,24 +133,45 @@
 
       view.ui.add(expandSearch, "top-right");
       
-      const councilFilter = new Expand({
-        view: view,
-        content: document.getElementById("council-filter"),
-        expandIconClass: "esri-icon-filter",
-        expanded: true
-      });
-      view.ui.add(councilFilter, "top-right");
+      // const councilFilter = new Expand({
+      //   view: view,
+      //   content: document.getElementById("council-filter"),
+      //   expandIconClass: "esri-icon-filter",
+      //   expanded: true
+      // });
+      // view.ui.add(councilFilter, "top-right");
+
+      // function filterDistrict(district) {
+      //   cityCouncil.definitionExpression = `District_N = ${district}`;
+      // }
+
+      // document.getElementById("district1").addEventListener("click", function() {
+      //   filterDistrict(1);
+      // });
 
       function filterDistrict(district) {
-        cityCouncil.definitionExpression = `District_N = ${district}`;
-      }
+  cityCouncil.definitionExpression = `District_N = ${district}`;
 
+  // Define the Query
+  const query = cityCouncil.createQuery();
+  query.where = `District_N = ${district}`;
+  query.returnGeometry = true;
 
-      document.getElementById("district1").addEventListener("click", function() {
-        filterDistrict(1);
+  // Execute the query
+  cityCouncil.queryFeatures(query).then(function(results){
+    if (results.features.length > 0) {
+      // Highlight the selected district
+      view.whenLayerView(cityCouncil).then(function(layerView){
+        const highlight = layerView.highlight(results.features);
+
+        // Zoom to the selected district
+        view.goTo(results.features).then(function(){
+          view.zoom = 15; // Change this to your desired zoom level
+        });
       });
-
-
+    }
+  });
+}
       const cityCouncil = new FeatureLayer({
         url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/CityCouncilDistrict/FeatureServer/0",
         outFields: ["District_N"],

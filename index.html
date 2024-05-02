@@ -37,12 +37,10 @@
       "esri/widgets/Home",
       "esri/layers/FeatureLayer",
       "esri/widgets/Legend",
-      "esri/tasks/support/Query",
-      "esri/widgets/Expand"
-    
+      "esri/widgets/Expand",
       
       
-    ], function (esriConfig, Map, MapView, BasemapGallery, Search, Home, FeatureLayer, Legend, Query, Expand) {
+    ], function (esriConfig, Map, MapView, BasemapGallery, Search, Home, FeatureLayer, Legend, Expand) {
       esriConfig.apiKey = "AAPK9010d0b61469421388268a0a3d6b9970behQAuDdJqQ1pqWiFduaupUbAQXKrMzBGDNlYvnzFhJVmo4o4_JV_Y0cDx9Umj8M";
 
       const map = new Map({
@@ -134,7 +132,7 @@
  
 
       view.ui.add(expandSearch, "top-right");
-
+      
       const councilFilter = new Expand({
         view: view,
         content: document.getElementById("council-filter"),
@@ -146,27 +144,11 @@
       function filterDistrict(district) {
         cityCouncil.definitionExpression = `District_N = ${district}`;
       }
-      
-// Define the Query
-const query = new Query();
-query.returnGeometry = true;
-query.outFields = ["*"];
-// Set the where clause to the filter you want to apply
-query.where = "District_N = '1'"; // Change this to your actual filter
 
-// Execute the query
-featureLayer.queryFeatures(query).then(function(results){
-  // Highlight the selected features
-  view.whenLayerView(featureLayer).then(function(layerView){
-    const highlight = layerView.highlight(results.features);
 
-    // Zoom to the selected features
-    view.goTo(results.features).then(function(){
-      view.zoom = 15; // Change this to your desired zoom level
-    });
-  });
-});
-
+      document.getElementById("district1").addEventListener("click", function() {
+        filterDistrict(1);
+      });
 
 
       const cityCouncil = new FeatureLayer({
@@ -191,7 +173,6 @@ featureLayer.queryFeatures(query).then(function(results){
           }
         }
       };
-      
 
       const legend = new Legend({
         view: view,

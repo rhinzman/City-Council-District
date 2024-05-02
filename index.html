@@ -146,7 +146,26 @@
       function filterDistrict(district) {
         cityCouncil.definitionExpression = `District_N = ${district}`;
       }
+      
+// Define the Query
+const query = new Query();
+query.returnGeometry = true;
+query.outFields = ["*"];
+// Set the where clause to the filter you want to apply
+query.where = "District_N = '1'"; // Change this to your actual filter
 
+// Execute the query
+featureLayer.queryFeatures(query).then(function(results){
+  // Highlight the selected features
+  view.whenLayerView(featureLayer).then(function(layerView){
+    const highlight = layerView.highlight(results.features);
+
+    // Zoom to the selected features
+    view.goTo(results.features).then(function(){
+      view.zoom = 15; // Change this to your desired zoom level
+    });
+  });
+});
 
 
 
@@ -172,25 +191,7 @@
           }
         }
       };
-      // Define the Query
-const query = new Query();
-query.returnGeometry = true;
-query.outFields = ["*"];
-// Set the where clause to the filter you want to apply
-query.where = "District_N = '1'"; // Change this to your actual filter
-
-// Execute the query
-featureLayer.queryFeatures(query).then(function(results){
-  // Highlight the selected features
-  view.whenLayerView(featureLayer).then(function(layerView){
-    const highlight = layerView.highlight(results.features);
-
-    // Zoom to the selected features
-    view.goTo(results.features).then(function(){
-      view.zoom = 15; // Change this to your desired zoom level
-    });
-  });
-});
+      
 
       const legend = new Legend({
         view: view,

@@ -154,6 +154,12 @@
       document.getElementById("district1").addEventListener("click", function() {
         filterDistrict(1);
       });
+      const expandable = new Expand({
+        view: view,
+        content: document.getElementById("expandable"),
+        expandIconClass: "esri-icon-question",
+        expanded: false
+      });
       
 
       const cityCouncil = new FeatureLayer({

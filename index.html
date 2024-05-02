@@ -133,45 +133,23 @@
 
       view.ui.add(expandSearch, "top-right");
       
-      // const councilFilter = new Expand({
-      //   view: view,
-      //   content: document.getElementById("council-filter"),
-      //   expandIconClass: "esri-icon-filter",
-      //   expanded: true
-      // });
-      // view.ui.add(councilFilter, "top-right");
-
-      // function filterDistrict(district) {
-      //   cityCouncil.definitionExpression = `District_N = ${district}`;
-      // }
-
-      // document.getElementById("district1").addEventListener("click", function() {
-      //   filterDistrict(1);
-      // });
+      const councilFilter = new Expand({
+        view: view,
+        content: document.getElementById("council-filter"),
+        expandIconClass: "esri-icon-filter",
+        expanded: true
+      });
+      view.ui.add(councilFilter, "top-right");
 
       function filterDistrict(district) {
-  cityCouncil.definitionExpression = `District_N = ${district}`;
+        cityCouncil.definitionExpression = `District_N = ${district}`;
+      }
 
-  // Define the Query
-  const query = cityCouncil.createQuery();
-  query.where = `District_N = ${district}`;
-  query.returnGeometry = true;
-
-  // Execute the query
-  cityCouncil.queryFeatures(query).then(function(results){
-    if (results.features.length > 0) {
-      // Highlight the selected district
-      view.whenLayerView(cityCouncil).then(function(layerView){
-        const highlight = layerView.highlight(results.features);
-
-        // Zoom to the selected district
-        view.goTo(results.features).then(function(){
-          view.zoom = 15; // Change this to your desired zoom level
-        });
+      document.getElementById("district1").addEventListener("click", function() {
+        filterDistrict(1);
       });
-    }
-  });
-}
+      
+
       const cityCouncil = new FeatureLayer({
         url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/CityCouncilDistrict/FeatureServer/0",
         outFields: ["District_N"],
@@ -217,7 +195,7 @@
   <div id="viewDiv"></div>
   <div class="'council-filter-item" id="council-filter">
     <div id="titleDiv">
-      <h3 id="titleText">Detroit City Council Districts</h3>
+      <h2 id="titleText">Detroit City Council Districts</h2>
     </div>
     <div class="council-filter-item" id="district1">District 1</div>
     <div class="council-filter-item" id="district2">District 2</div>
@@ -227,6 +205,11 @@
     <div class="council-filter-item" id="district6">District 6</div>
     <div class="council-filter-item" id="district7">District 7</div>
   </div>
+  <div class="expandable" id="expandable">
+    <div id="expandableContent">
+      <h2>Info</h2>
+      <p>This application tracks search results and writes it back to a table. The table stores the address, latitude, and longitude of the location the search is for</p>
+    </div>
 
 </body>
 </html>
